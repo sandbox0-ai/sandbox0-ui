@@ -8,6 +8,7 @@ export { PixelButton } from "./components/PixelButton";
 export { PixelCard } from "./components/PixelCard";
 export { PixelCollapsible, PixelCollapsiblePanel } from "./components/PixelCollapsible";
 export { PixelDialog } from "./components/PixelDialog";
+export { PixelDropdown, PixelDropdownChevron } from "./components/PixelDropdown";
 export { PixelIconClose } from "./components/PixelIconClose";
 export { PixelInput } from "./components/PixelInput";
 export { PixelSelect } from "./components/PixelSelect";
@@ -27,6 +28,10 @@ export type {
   PixelCollapsiblePanelProps,
 } from "./components/PixelCollapsible";
 export type { PixelDialogProps } from "./components/PixelDialog";
+export type {
+  PixelDropdownProps,
+  PixelDropdownRenderContext,
+} from "./components/PixelDropdown";
 export type { PixelIconCloseProps } from "./components/PixelIconClose";
 
 // Utilities
