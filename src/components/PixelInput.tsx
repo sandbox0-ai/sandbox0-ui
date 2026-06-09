@@ -53,15 +53,16 @@ export function PixelInput({
         className={cn(
           // Base styles
           "w-full px-3 py-2 text-sm font-mono",
-          "bg-background text-foreground",
+          "bg-surface text-foreground",
           "placeholder:text-muted",
-          // Level 1 pixel border
-          "border border-foreground/25",
-          // Focus state - accent glow
-          "focus:outline-none focus:border-accent",
-          "focus:shadow-[0_0_0_2px_var(--color-accent)]",
+          // Hairline border
+          "border border-line-strong",
+          // Focus state - subtle accent ring
+          "transition-colors focus:outline-none focus:border-accent",
+          "focus:shadow-[0_0_0_2px_rgb(var(--color-accent-rgb)/0.35)]",
           // Error state
-          error && "border-red-500 focus:border-red-500 focus:shadow-[0_0_0_2px_rgb(239,68,68)]",
+          error &&
+            "border-danger focus:border-danger focus:shadow-[0_0_0_2px_rgb(var(--color-danger-rgb)/0.35)]",
           // Disabled state
           "disabled:opacity-50 disabled:cursor-not-allowed",
           className
@@ -72,7 +73,7 @@ export function PixelInput({
         <p
           className={cn(
             "text-xs",
-            error ? "text-red-500" : "text-muted"
+            error ? "text-danger" : "text-muted"
           )}
         >
           {error || helper}

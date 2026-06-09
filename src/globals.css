@@ -8,19 +8,44 @@
   /* Force dark mode */
   :root {
     color-scheme: dark;
-    --color-background: #000000;
-    --color-foreground: #FFFFFF;
-    /* RGB components (space-separated) for use with Tailwind opacity modifiers, e.g. bg-accent/60 */
+
+    /*
+     * Single source of truth: RGB components (space-separated) so every token
+     * works with Tailwind opacity modifiers, e.g. bg-surface/60, border-line/50.
+     */
+    --color-background-rgb: 0 0 0;
+    --color-foreground-rgb: 245 245 247;
     --color-accent-rgb: 249 115 22;
+    /* Layered surfaces: base canvas -> raised panel -> popover/elevated. */
+    --color-surface-rgb: 22 22 24;
+    --color-surface-2-rgb: 32 32 36;
+    --color-elevated-rgb: 42 42 47;
+    /* Text + hairlines. */
+    --color-muted-rgb: 148 148 156;
+    --color-line-rgb: 40 40 44;
+    --color-line-strong-rgb: 66 66 72;
+    /* Semantic status. */
+    --color-success-rgb: 52 211 153;
+    --color-warning-rgb: 251 191 36;
+    --color-danger-rgb: 248 113 113;
+    --color-info-rgb: 96 165 250;
+
+    /* Legacy aliases kept for direct var() consumers (grids, focus rings). */
+    --color-background: rgb(var(--color-background-rgb));
+    --color-foreground: rgb(var(--color-foreground-rgb));
     --color-accent: rgb(var(--color-accent-rgb));
-    --color-surface: #1A1A1A;
-    --color-muted: #888888;
+    --color-surface: rgb(var(--color-surface-rgb));
+    --color-muted: rgb(var(--color-muted-rgb));
+    --color-line: rgb(var(--color-line-rgb));
   }
 
   html {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
@@ -28,10 +53,15 @@
     min-height: 100vh;
   }
 
-  /* Pixel Style Scrollbar */
+  ::selection {
+    background-color: rgb(var(--color-accent-rgb) / 0.3);
+    color: var(--color-foreground);
+  }
+
+  /* Slim, restrained scrollbar that still reads as part of the dark console. */
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
@@ -39,18 +69,21 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-surface);
-    border: none;
+    background: rgb(var(--color-line-strong-rgb));
+    border: 3px solid transparent;
+    background-clip: padding-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-muted);
+    background: rgb(var(--color-muted-rgb));
+    border: 3px solid transparent;
+    background-clip: padding-box;
   }
 
   /* Firefox */
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-surface) transparent;
+    scrollbar-color: rgb(var(--color-line-strong-rgb)) transparent;
   }
 
   /* Remove all border-radius by default (pixel art style) */
@@ -77,6 +110,40 @@
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /*
+   * Eyebrow / overline label. Replaces the old 8-9px "Press Start 2P" labels
+   * that were illegible. Monospace keeps the terminal texture while staying
+   * crisp at small sizes.
+   */
+  .text-eyebrow {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* Pixel display font, but only at sizes where it stays readable. */
+  .font-display {
+    font-family: 'Press Start 2P', monospace;
+    line-height: 1.5;
+  }
+
+  /* Subtle blueprint grid used behind console shells. */
+  .console-grid {
+    background-image:
+      linear-gradient(rgb(var(--color-foreground-rgb) / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--color-foreground-rgb) / 0.04) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 

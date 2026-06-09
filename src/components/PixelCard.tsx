@@ -1,6 +1,6 @@
 import React from "react";
 import type { PixelBaseProps } from "../types";
-import { cn, getPixelShadowClass } from "../utils";
+import { cn } from "../utils";
 
 export interface PixelCardProps
   extends PixelBaseProps,
@@ -44,23 +44,22 @@ export function PixelCard({
   return (
     <div
       className={cn(
-        "bg-surface flex flex-col",
-        getPixelShadowClass(scale, accent),
+        "bg-surface border border-line flex flex-col shadow-panel",
         interactive && "cursor-pointer transition-all duration-150",
-        interactive && "hover:-translate-x-[2px] hover:-translate-y-[2px]",
-        interactive && (accent ? "hover:shadow-pixel-md-accent" : "hover:shadow-pixel-md"),
+        interactive && "hover:border-line-strong hover:shadow-panel-hover",
+        accent && "border-accent/40",
         className
       )}
       {...props}
     >
       {header && (
-        <div className="px-4 py-3 border-b border-foreground/15 font-pixel text-xs">
+        <div className="px-4 py-3 border-b border-line text-eyebrow text-muted">
           {header}
         </div>
       )}
       <div className="p-4 flex-1">{children}</div>
       {footer && (
-        <div className="px-4 py-3 border-t border-foreground/15">
+        <div className="px-4 py-3 border-t border-line">
           {footer}
         </div>
       )}
