@@ -6,22 +6,16 @@ export interface PixelButtonProps
   extends PixelBaseProps,
     React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  /** Button variant */
-  variant?: "primary" | "secondary";
+  /** Visual emphasis of the button. */
+  variant?: "primary" | "secondary" | "ghost" | "danger";
 }
 
 /**
- * PixelButton - Interactive button with pixel-style press effect
- * 
- * Features a satisfying "press down" animation on click, simulating
- * the tactile feel of physical arcade buttons.
- * 
- * @example
- * ```tsx
- * <PixelButton variant="primary" onClick={handleClick}>
- *   Deploy Sandbox
- * </PixelButton>
- * ```
+ * PixelButton - Interactive button with a tactile retro press effect.
+ *
+ * The primary variant keeps the arcade "press down" feel (an offset shadow
+ * that collapses on :active). `secondary` is a quiet bordered action, `ghost`
+ * is borderless inline, and `danger` is reserved for destructive operations.
  */
 export function PixelButton({
   children,
@@ -32,35 +26,38 @@ export function PixelButton({
   disabled,
   ...props
 }: PixelButtonProps) {
-  const variantClasses = {
-    primary: "bg-accent text-white hover:bg-white hover:text-accent",
-    secondary: "bg-surface text-foreground hover:bg-foreground hover:text-background",
+  const variantClasses: Record<NonNullable<PixelButtonProps["variant"]>, string> = {
+    primary: "bg-accent text-black font-semibold hover:bg-white hover:text-black",
+    secondary:
+      "bg-surface-2 text-foreground border border-line-strong hover:border-foreground/40 hover:bg-elevated",
+    ghost: "bg-transparent text-muted hover:text-foreground hover:bg-surface-2",
+    danger: "bg-danger/15 text-danger border border-danger/40 hover:bg-danger hover:text-black",
   };
 
-  // Press effect: translate and reduce shadow on active
-  const pressEffect = {
-    sm: "active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0_0_var(--color-accent)]",
-    md: "active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_0_var(--color-accent)]",
-    lg: "active:translate-x-[4px] active:translate-y-[4px] active:shadow-[4px_4px_0_0_var(--color-accent)]",
+  // Tactile press, only for the lifted primary block.
+  const pressEffect: Record<PixelScale, string> = {
+    sm: "active:translate-x-[1px] active:translate-y-[1px] active:shadow-none",
+    md: "active:translate-x-[2px] active:translate-y-[2px] active:shadow-none",
+    lg: "active:translate-x-[3px] active:translate-y-[3px] active:shadow-none",
   };
 
-  const paddingClasses = {
+  const paddingClasses: Record<PixelScale, string> = {
     sm: "px-3 py-1.5 text-xs",
-    md: "px-4 py-2 text-sm font-pixel",
-    lg: "px-6 py-3 text-base font-pixel",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base",
   };
 
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center",
+        "inline-flex items-center justify-center gap-2 whitespace-nowrap font-mono tracking-wide",
         "transition-all duration-75",
-        "disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-x-0 disabled:active:translate-y-0",
+        "disabled:opacity-40 disabled:cursor-not-allowed disabled:active:translate-x-0 disabled:active:translate-y-0",
         variantClasses[variant],
-        getPixelShadowClass(scale, accent),
-        pressEffect[scale],
+        variant === "primary" && getPixelShadowClass(scale, accent),
+        variant === "primary" && pressEffect[scale],
         paddingClasses[scale],
-        className
+        className,
       )}
       disabled={disabled}
       {...props}
