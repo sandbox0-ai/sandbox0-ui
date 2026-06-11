@@ -39,18 +39,25 @@ export function SearchInput({
 }: SearchInputProps) {
   return (
     <div className={cn("relative flex min-w-[220px] flex-1 items-center", className)}>
-      <span
+      <svg
         aria-hidden="true"
-        className="pointer-events-none absolute left-3 font-mono text-sm text-muted"
+        viewBox="0 0 16 16"
+        className="pointer-events-none absolute left-3 h-4 w-4 text-muted"
+        fill="none"
       >
-        {"\u2315"}
-      </span>
+        <path
+          d="M7 12a5 5 0 1 1 3.54-1.46L14 14"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="square"
+        />
+      </svg>
       <input
         type="search"
         value={value}
         onChange={(event) => onValueChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full border border-line-strong bg-background py-2 pl-8 pr-3 font-mono text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent"
+        className="w-full border border-line-strong bg-background py-2 pl-9 pr-3 font-mono text-sm text-foreground placeholder:text-muted outline-none transition-colors focus:border-accent"
         {...props}
       />
     </div>
