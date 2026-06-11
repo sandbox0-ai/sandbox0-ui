@@ -6,11 +6,11 @@ export interface PixelInputProps
   extends Omit<PixelBaseProps, "scale">,
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   /** Label text */
-  label?: string;
+  label?: React.ReactNode;
   /** Error message */
-  error?: string;
+  error?: React.ReactNode;
   /** Helper text */
-  helper?: string;
+  helper?: React.ReactNode;
 }
 
 /**
@@ -36,7 +36,8 @@ export function PixelInput({
   id,
   ...props
 }: PixelInputProps) {
-  const inputId = id || label?.toLowerCase().replace(/\s+/g, "-");
+  const generatedId = React.useId();
+  const inputId = id ?? generatedId;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -61,7 +62,7 @@ export function PixelInput({
           "transition-colors focus:outline-none focus:border-accent",
           "focus:shadow-[0_0_0_2px_rgb(var(--color-accent-rgb)/0.35)]",
           // Error state
-          error &&
+          Boolean(error) &&
             "border-danger focus:border-danger focus:shadow-[0_0_0_2px_rgb(var(--color-danger-rgb)/0.35)]",
           // Disabled state
           "disabled:opacity-50 disabled:cursor-not-allowed",

@@ -33,8 +33,8 @@ export function getPixelShadowClass(
 export function getPixelFontClass(scale: PixelScale): string {
   const fontMap = {
     sm: "font-body text-sm",
-    md: "font-pixel text-[10px] leading-relaxed",
-    lg: "font-pixel text-xs leading-relaxed",
+    md: "font-mono text-sm leading-relaxed",
+    lg: "font-mono text-base leading-relaxed",
   };
   return fontMap[scale];
 }

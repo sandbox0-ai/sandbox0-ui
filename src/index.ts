@@ -10,7 +10,11 @@ export { PixelCollapsible, PixelCollapsiblePanel } from "./components/PixelColla
 export { PixelDialog } from "./components/PixelDialog";
 export { PixelDropdown, PixelDropdownChevron } from "./components/PixelDropdown";
 export { PixelIconClose } from "./components/PixelIconClose";
+export { PixelCheckbox } from "./components/PixelCheckbox";
+export type { PixelCheckboxProps } from "./components/PixelCheckbox";
 export { PixelInput } from "./components/PixelInput";
+export { PixelTextarea } from "./components/PixelTextarea";
+export type { PixelTextareaProps } from "./components/PixelTextarea";
 export { PixelSelect } from "./components/PixelSelect";
 export type { PixelSelectOption, PixelSelectProps } from "./components/PixelSelect";
 export { PixelBadge } from "./components/PixelBadge";
@@ -27,6 +31,8 @@ export { StatCard, StatGrid } from "./components/Stat";
 export type { StatCardProps, StatGridProps } from "./components/Stat";
 export { DataList } from "./components/DataList";
 export type { DataListProps, DataListItem } from "./components/DataList";
+export { DangerZone, FieldGrid, FormSection } from "./components/Form";
+export type { DangerZoneProps, FieldGridProps, FormSectionProps } from "./components/Form";
 export { StatusPill, statusTone } from "./components/StatusPill";
 export type { StatusPillProps, StatusTone } from "./components/StatusPill";
 export {

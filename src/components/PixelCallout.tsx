@@ -1,6 +1,6 @@
 import React from "react";
 import type { PixelBaseProps } from "../types";
-import { cn, getPixelShadowClass } from "../utils";
+import { cn } from "../utils";
 
 export interface PixelCalloutProps
   extends PixelBaseProps,
@@ -43,19 +43,19 @@ export function PixelCallout({
       text: "text-accent",
     },
     success: {
-      bg: "bg-green-500/10",
-      border: "border-green-500/60",
-      text: "text-green-500",
+      bg: "bg-success/10",
+      border: "border-success/60",
+      text: "text-success",
     },
     warning: {
-      bg: "bg-yellow-500/10",
-      border: "border-yellow-500/60",
-      text: "text-yellow-500",
+      bg: "bg-warning/10",
+      border: "border-warning/60",
+      text: "text-warning",
     },
     danger: {
-      bg: "bg-red-500/10",
-      border: "border-red-500/60",
-      text: "text-red-500",
+      bg: "bg-danger/10",
+      border: "border-danger/60",
+      text: "text-danger",
     },
   };
 
@@ -74,7 +74,7 @@ export function PixelCallout({
         "p-4 border",
         styles.bg,
         styles.border,
-        getPixelShadowClass(scale, false),
+        "shadow-panel",
         className
       )}
       {...props}
@@ -87,7 +87,7 @@ export function PixelCallout({
         )}
         <div className="flex-1">
           {title && (
-            <div className={cn("font-pixel text-xs mb-2", styles.text)}>
+            <div className={cn("mb-2 font-mono text-sm font-semibold", styles.text)}>
               {title}
             </div>
           )}

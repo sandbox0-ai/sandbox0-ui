@@ -18,10 +18,14 @@ export interface DataTableProps<T> {
   getRowKey: (row: T, index: number) => string;
   /** Navigate / select on row click. */
   onRowClick?: (row: T) => void;
+  rowClassName?: (row: T, index: number) => string | undefined;
   /** Message shown when there are no rows. */
   emptyLabel?: string;
+  /** Supporting text shown in the empty state. */
+  emptyDescription?: React.ReactNode;
   /** Minimum table width before horizontal scroll kicks in. */
   minWidthClassName?: string;
+  density?: "default" | "compact";
   className?: string;
 }
 
@@ -43,11 +47,25 @@ export function DataTable<T>({
   rows,
   getRowKey,
   onRowClick,
+  rowClassName,
   emptyLabel = "No data",
+  emptyDescription,
   minWidthClassName = "min-w-[720px]",
+  density = "default",
   className,
 }: DataTableProps<T>) {
-  if (rows.length === 0) return <EmptyState label={emptyLabel} />;
+  if (rows.length === 0) return <EmptyState label={emptyLabel} description={emptyDescription} />;
+
+  const cellPadding = density === "compact" ? "px-3 py-2" : "px-4 py-3";
+  const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>, row: T) => {
+    if (!onRowClick) return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (target?.closest("a,button,input,select,textarea")) return;
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) {
+      return;
+    }
+    onRowClick(row);
+  };
 
   return (
     <div className="overflow-x-auto">
@@ -58,7 +76,8 @@ export function DataTable<T>({
               <th
                 key={index}
                 className={cn(
-                  "px-4 py-3 text-eyebrow font-medium text-muted",
+                  "text-eyebrow font-medium text-muted",
+                  cellPadding,
                   column.align && alignClasses[column.align],
                   column.className,
                 )}
@@ -72,17 +91,31 @@ export function DataTable<T>({
           {rows.map((row, rowIndex) => (
             <tr
               key={getRowKey(row, rowIndex)}
-              onClick={onRowClick ? () => onRowClick(row) : undefined}
+              onClick={onRowClick ? (event) => handleRowClick(event, row) : undefined}
+              onKeyDown={
+                onRowClick
+                  ? (event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        onRowClick(row);
+                      }
+                    }
+                  : undefined
+              }
+              role={onRowClick ? "button" : undefined}
+              tabIndex={onRowClick ? 0 : undefined}
               className={cn(
                 "border-b border-line/60 transition-colors last:border-0",
-                onRowClick && "cursor-pointer hover:bg-surface-2",
+                onRowClick && "cursor-pointer hover:bg-surface-2 focus:bg-surface-2 focus:outline-none",
+                rowClassName?.(row, rowIndex),
               )}
             >
               {columns.map((column, colIndex) => (
                 <td
                   key={colIndex}
                   className={cn(
-                    "px-4 py-3 align-middle",
+                    "align-middle",
+                    cellPadding,
                     column.align && alignClasses[column.align],
                     column.className,
                   )}

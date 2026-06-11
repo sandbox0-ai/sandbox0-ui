@@ -90,6 +90,8 @@ export function PixelDropdown({
   }
 
   useEffect(() => {
+    if (!open) return;
+
     function handlePointerDown(event: MouseEvent) {
       if (!rootRef.current?.contains(event.target as Node)) {
         setOpen(false);
@@ -109,7 +111,7 @@ export function PixelDropdown({
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [controlledOpen, onOpenChange]);
+  }, [controlledOpen, onOpenChange, open]);
 
   const alignClass = {
     start: "left-0",
@@ -163,7 +165,7 @@ export function PixelDropdown({
             "absolute z-20 overflow-hidden",
             menuSide === "top" ? "bottom-full mb-2" : "top-full mt-2",
             alignClass[align],
-            "bg-background shadow-[4px_4px_0_0_rgba(255,255,255,0.08)]",
+            "border border-line-strong bg-elevated shadow-popover",
             getPixelShadowClass(scale, false),
             menuClassName
           )}

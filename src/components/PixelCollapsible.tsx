@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useId, useState } from "react";
-import type { PixelBaseProps, PixelScale } from "../types";
-import { cn, getPixelShadowClass } from "../utils";
+import type { PixelBaseProps } from "../types";
+import { cn } from "../utils";
 
 // ─── Pixel-art chevron icon ──────────────────────────────────────────────────
 // Same glyph as PixelSelect's chevron for visual consistency across the library.
@@ -47,37 +47,7 @@ export interface PixelCollapsibleProps extends PixelBaseProps {
   contentClassName?: string;
 }
 
-/**
- * PixelCollapsible — A pixel-art accordion / disclosure primitive.
- *
- * Renders a full-width trigger button paired with a collapsible content panel.
- * Works in both controlled and uncontrolled modes.
- *
- * Pixel design details:
- * - Trigger uses the shared pixel shadow scale system
- * - Shadow switches to accent color when the panel is open
- * - Pixel-art chevron (identical to PixelSelect) rotates 180° on open
- * - Press effect mirrors PixelButton's tactile "push" animation
- * - Content panel is separated by a 2px accent border
- * - No border-radius anywhere (enforced by globals.css)
- *
- * @example
- * ```tsx
- * // Uncontrolled
- * <PixelCollapsible trigger="Configuration" defaultOpen>
- *   <p>Panel content here.</p>
- * </PixelCollapsible>
- *
- * // Controlled (e.g. FAQ accordion)
- * <PixelCollapsible
- *   trigger="What is Sandbox0?"
- *   open={activeId === "faq-1"}
- *   onOpenChange={(open) => setActiveId(open ? "faq-1" : null)}
- * >
- *   Sandbox0 is an AI agent sandbox...
- * </PixelCollapsible>
- * ```
- */
+/** PixelCollapsible - Disclosure primitive for forms, docs, and dense panels. */
 export function PixelCollapsible({
   trigger,
   children,
@@ -104,16 +74,8 @@ export function PixelCollapsible({
     onOpenChange?.(next);
   };
 
-  // Pixel "press down" effect — matches PixelButton's active state
-  const pressEffect: Record<PixelScale, string> = {
-    sm: "active:translate-x-[1px] active:translate-y-[1px]",
-    md: "active:translate-x-[2px] active:translate-y-[2px]",
-    lg: "active:translate-x-[4px] active:translate-y-[4px]",
-  };
-
   return (
     <div className={cn("flex flex-col", className)}>
-      {/* ── Trigger ── */}
       <button
         type="button"
         aria-expanded={isOpen}
@@ -121,14 +83,10 @@ export function PixelCollapsible({
         onClick={handleToggle}
         className={cn(
           "group flex w-full items-center justify-between gap-4",
-          "bg-surface px-4 py-3",
-          "font-pixel text-[10px] uppercase tracking-[0.06em]",
-          "transition-all duration-75",
-          // Idle: muted text; hover: full foreground
+          "border border-line-strong bg-surface-2 px-4 py-3",
+          "font-mono text-sm transition-colors",
           isOpen ? "text-foreground" : "text-muted hover:text-foreground",
-          // Shadow: accent when open so the active state is unmistakable
-          getPixelShadowClass(scale, isOpen || accent),
-          pressEffect[scale],
+          (isOpen || accent) && "border-accent/50 bg-accent/10",
           triggerClassName
         )}
       >
@@ -144,15 +102,12 @@ export function PixelCollapsible({
         />
       </button>
 
-      {/* ── Content panel ── */}
       {isOpen && (
         <div
           id={panelId}
           role="region"
           className={cn(
-            "bg-background",
-            // 2px accent top-border signals the panel belongs to the trigger above
-            "border-t-2 border-accent/40",
+            "border border-t-0 border-line-strong bg-surface",
             contentClassName
           )}
         >
